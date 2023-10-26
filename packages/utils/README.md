@@ -8,7 +8,7 @@
 
 🎯 **方法**
 
-```js
+```ts
 import { Storage } from 'docker-awesome';
 
 // 设置本地存储
@@ -89,7 +89,7 @@ export default function () {
 
 🎯 **方法**
 
-```js
+```ts
 import { Currency } from 'docker-awesome';
 
 // 原有方法：
@@ -232,7 +232,7 @@ export default function () {
 
 🎯 **方法**
 
-```js
+```ts
 import { Qs } from 'docker-awesome';
 // 字符串化
 // options: 默认为 { addQueryPrefix: true, encoder: function (str) { return str; } }，可传入同名参数覆盖
@@ -279,7 +279,7 @@ export default function () {
 
 🎯 **方法**
 
-```js
+```ts
 import { Dayjs } from 'docker-awesome';
 // 原有方法：
 // 更多请参考 dayjs
@@ -421,7 +421,7 @@ export default function () {
 
 🎯 **方法**
 
-```js
+```ts
 import { HTTP_STATUS_CODE } from 'docker-awesome';
 
 // 请求成功。
@@ -434,7 +434,42 @@ HTTP_STATUS_CODE.NOT_FOUND; // 404
 HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
 ```
 
-## 5️⃣
+## 5️⃣ [Lodash](https://www.npmjs.com/package/lodash-es) 工具库
+
+集成 [Lodash](https://lodash.com/) `A modern JavaScript utility library delivering modularity, performance & extras.`
+
+🎯 **方法**
+
+参考 [Lodash Documentation](https://lodash.com/docs)，使用方式请看下面示例
+
+🎯 **示例**
+
+```tsx
+import { Lodash } from 'docker-awesome';
+
+export default function () {
+  return (
+    <>
+      <p>
+        1. Lodash.join(array, [separator=',']) 将 array 中的所有元素转换为由
+        separator 分隔的字符串。
+      </p>
+      <p>
+        <code>Lodash.join(['a', 'b', 'c'], '~')：</code>
+        <span>&emsp;</span>
+        <output>{Lodash.join(['a', 'b', 'c'], '~')}</output>
+      </p>
+      <br />
+      <p>2. Lodash.add(augend, addend) 两个数相加。</p>
+      <p>
+        <code>Lodash.add(6, 4)：</code>
+        <span>&emsp;</span>
+        <output>{Lodash.add(6, 4)}</output>
+      </p>
+    </>
+  );
+}
+```
 
 ## 6️⃣
 

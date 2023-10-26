@@ -1,3 +1,4 @@
+export { default as Lodash } from 'lodash-es';
 export { default as Currency } from './currency';
 export { default as Dayjs } from './dayjs';
 export { default as Qs } from './qs';
