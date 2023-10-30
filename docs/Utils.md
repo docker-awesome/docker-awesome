@@ -2,7 +2,7 @@
 
 `实用工具汇总`
 
-## 0️⃣ Storage 本地存储
+## 1. Storage 本地存储
 
 `Web localStorage 本地存储，使用 Base64 编码，支持设置有效期`
 
@@ -83,7 +83,7 @@ export default function () {
 }
 ```
 
-## 1️⃣ Currency 货币格式化
+## 2. Currency 货币格式化
 
 `Currency 基于` [currency.js](https://www.npmjs.com/package/currency.js) `进行扩展，并保留原有方法。扩展属性 $, $ 属性上挂载了快捷格式化方法`
 
@@ -224,7 +224,7 @@ export default function () {
 }
 ```
 
-## 2️⃣ Qs 查询字符串格式化
+## 3. Qs 查询字符串格式化
 
 `Qs 基于` [qs](https://www.npmjs.com/package/qs) `进行扩展, 查询字符串解析和字符串化。`
 
@@ -271,7 +271,7 @@ export default function () {
 }
 ```
 
-## 3️⃣ Dayjs 日期时间格式化
+## 4. Dayjs 日期时间格式化
 
 `Dayjs 基于` [dayjs](https://www.npmjs.com/package/dayjs) `扩展属性 $, $ 属性上挂载了快捷日期时间格式化方法。`
 
@@ -411,7 +411,7 @@ export default function () {
 }
 ```
 
-## 4️⃣ HTTP 响应状态码
+## 5. HTTP 响应状态码
 
 `HTTP 状态码常量, 参考：` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `或` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
@@ -434,7 +434,7 @@ HTTP_STATUS_CODE.NOT_FOUND; // 404
 HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
 ```
 
-## 5️⃣ [Lodash](https://www.npmjs.com/package/lodash-es) 工具库
+## 6. [Lodash](https://www.npmjs.com/package/lodash-es) 工具库
 
 集成 [Lodash](https://lodash.com/) `A modern JavaScript utility library delivering modularity, performance & extras.`
 
@@ -471,12 +471,196 @@ export default function () {
 }
 ```
 
-## 6️⃣
+## 7. UUID 工具库
 
-## 7️⃣
+集成 [uuid](https://www.npmjs.com/package/uuid) `To create a random UUID...`
 
-## 8️⃣
+🎯 **方法**
 
-## 9️⃣
+参考 [uuid docs](https://www.npmjs.com/package/uuid)，使用方式请看下面示例
 
-## 🔟
+🎯 **示例**
+
+```tsx
+import { UUID } from 'docker-awesome';
+import { useState } from 'react';
+
+export default function () {
+  const [state] = useState(() => UUID.v4());
+
+  return (
+    <>
+      <p>1. uuid.v4</p>
+      <p>
+        <code>UUID.v4()：</code>
+        <span>&emsp;</span>
+        <output>{state}</output>
+      </p>
+      <p>2. uuid.version</p>
+      <p>
+        <code>UUID.version("{state}")：</code>
+        <span>&emsp;</span>
+        <output>{UUID.version(state)}</output>
+      </p>
+    </>
+  );
+}
+```
+
+## 8. EventBus 消息发布订阅
+
+🎯 **方法**
+
+```ts
+/** 消息订阅
+ * type: 订阅类型
+ * listener: 订阅回调
+ * options: 默认为 { scope: null, once: false }，可传入同名参数覆盖。
+ *          传入 scope 可改变 listener 回调的 this 指向。
+ *          once 为 true 时，只订阅一次消息。
+ * 函数返回：取消订阅回调
+ * 注：传入scope时, listener 使用匿名函数，不可使用箭头函数
+ */
+const unsubscribe = EventBus.subscribe(type, listener, options);
+
+/** 清除消息订阅
+ * type: 消息订阅类型，传入只清除指定的消息订阅类型，不传则清除所有消息订阅。
+ */
+EventBus.clear(type);
+
+/** 消息发布
+ * type: 发布类型
+ * args: 发布数据，即传给消息订阅回调 listener 的参数。
+ */
+EventBus.dispatch(type, ...args);
+```
+
+🎯 **示例**
+
+```tsx
+import { EventBus } from 'docker-awesome';
+import { useCallback, useEffect, useRef } from 'react';
+
+export default function () {
+  const ref = useRef();
+
+  useEffect(() => {
+    EventBus.subscribe('update', (params) => {
+      console.log('普通订阅：', params);
+    });
+
+    ref.current = EventBus.subscribe('update', (params) => {
+      console.log('取消订阅：', params);
+    });
+
+    EventBus.subscribe(
+      'update',
+      (params) => {
+        console.log('订阅一次：', params);
+      },
+      { once: true },
+    );
+
+    const foo = { bar: 123 };
+    EventBus.subscribe(
+      'update',
+      function (params) {
+        console.log('改变 this 指向：', params);
+        console.log('bar：', this.bar);
+      },
+      { scope: foo, once: true },
+    );
+
+    return () => {
+      EventBus.clear();
+    };
+  }, []);
+
+  const dispatch = useCallback(() => {
+    EventBus.dispatch('update', '发布！');
+    if (ref.current) {
+      ref.current();
+      ref.current = null;
+    }
+  }, []);
+
+  return (
+    <>
+      <p>1. 消息订阅：</p>
+      <p>&#47;&#47; 普通订阅</p>
+      <p>
+        <code>EventBus.subscribe&#40;"update", (params) =&gt; &#123;</code>
+      </p>
+      <p>
+        <code>&emsp;console.log(params);</code>
+      </p>
+      <p>
+        <code>&#125;&#41;;</code>
+      </p>
+      <br />
+      <p>&#47;&#47; 订阅一次</p>
+      <p>
+        <code>EventBus.subscribe&#40;"update", (params) =&gt; &#123;</code>
+      </p>
+      <p>
+        <code>&emsp;console.log(params);</code>
+      </p>
+      <p>
+        <code>&#125;, &#123; once: true &#125;&#41;;</code>
+      </p>
+      <br />
+      <p>&#47;&#47; 改变 this 指向</p>
+      <p>
+        <code>const foo = &#123; bar: 123 &#125;;</code>
+      </p>
+      <p>
+        <code>EventBus.subscribe&#40;"update", function(params) &#123;</code>
+      </p>
+      <p>
+        <code>&emsp;console.log(params);</code>
+      </p>
+      <p>
+        <code>&emsp;console.log(this.bar);</code>
+      </p>
+      <p>
+        <code>&#125;, &#123; scope: foo, once: true &#125;&#41;;</code>
+      </p>
+      <br />
+      <p>&#47;&#47; 取消订阅</p>
+      <p>
+        <code>
+          const unsubscribe = EventBus.subscribe&#40;"update", (params) =&gt;
+          &#123;
+        </code>
+      </p>
+      <p>
+        <code>&emsp;console.log(params);</code>
+      </p>
+      <p>
+        <code>&#125;&#41;;</code>
+      </p>
+      <p>
+        <code>unsubscribe();</code>
+      </p>
+      <br />
+      <p>2. 消息发布：</p>
+      <p>
+        <code>EventBus.dispatch("update", "发布！");</code>
+      </p>
+      <br />
+      <p>3. 清除消息订阅：</p>
+      <p>&#47;&#47; 清除指定订阅</p>
+      <p>
+        <code>EventBus.clear("update");</code>
+      </p>
+      <p>&#47;&#47; 清除所有</p>
+      <p>
+        <code>EventBus.clear();</code>
+      </p>
+      <br />
+      <p>请到控制台查看结果：</p>
+      <button onClick={dispatch}>发布</button>
+    </>
+  );
+}
+```
