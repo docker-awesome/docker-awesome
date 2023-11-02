@@ -4,9 +4,8 @@
   "private": true,
   "description": "package: docker-awesome's docs.",
   "keywords": [
-    "@docker-awesome",
-    "@docker-awesome/storage",
-    "@docker-awesome/currency"
+    "docker-awesome",
+    "@docker-awesome/utils"
   ],
   "homepage": "https://github.com/docker-awesome",
   "bugs": {
