@@ -1,3 +1,4 @@
+export { default as Cookies } from 'js-cookie';
 export { default as Lodash } from 'lodash-es';
 export * as UUID from 'uuid';
 export { default as Currency } from './currency';

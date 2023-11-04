@@ -33,11 +33,13 @@
     "currency.js": "^2.0.4",
     "dayjs": "^1.11.10",
     "js-base64": "^3.7.5",
+    "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
     "qs": "^6.11.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.5",
     "@types/lodash-es": "^4.17.10",
     "@types/qs": "^6.9.8",
     "@types/uuid": "^9.0.6"
