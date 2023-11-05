@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/docker-awesome/docker-awesome/compare/@docker-awesome/utils@0.2.0...@docker-awesome/utils@0.3.0) (2023-11-05)
+
+### Features
+
+- **utils:** add js-cookie ([380a831](https://github.com/docker-awesome/docker-awesome/commit/380a831f548f9d5931004800d8709cd51d43ede6))
+- **utils:** add uuid & event-bus ([2b8f3a4](https://github.com/docker-awesome/docker-awesome/commit/2b8f3a4cfee1071276c99d68667809871a392b91))
+
 # [0.2.0](https://github.com/docker-awesome/docker-awesome/compare/@docker-awesome/utils@0.1.0...@docker-awesome/utils@0.2.0) (2023-10-26)
 
 ### Features
