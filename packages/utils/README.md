@@ -1,8 +1,6 @@
-# Utils
+# 实用工具
 
-`实用工具汇总`
-
-## 1. Storage 本地存储
+## Storage 本地存储
 
 `Web localStorage 本地存储，使用 Base64 编码，支持设置有效期`
 
@@ -26,6 +24,16 @@ Storage.remove(key);
 
 // 清空本地存储
 Storage.clear();
+
+// 获取位于 index 的键值
+Storage.key(index);
+
+// 获取保存的数据项个数
+Storage.count();
+
+// 监听储存的数据变化
+// 备注: callback 不在导致数据变化的当前页面触发，而是在同一个域名的其他窗口触发。
+Storage.listen(callback);
 ```
 
 🎯 **示例**
@@ -83,148 +91,67 @@ export default function () {
 }
 ```
 
-## 2. Currency 货币格式化
+## Session 会话存储
 
-`Currency 基于` [currency.js](https://www.npmjs.com/package/currency.js) `进行扩展，并保留原有方法。扩展属性 $, $ 属性上挂载了快捷格式化方法`
+`Web sessionStorage 会话存储，使用 Base64 编码，支持设置有效期`
 
 🎯 **方法**
 
-```ts
-import { Currency } from 'docker-awesome';
-
-// 原有方法：
-// 更多请参考 currency.js
-Currency(value: currencyjs.Any, options: currencyjs.Options);
-
-// 扩展方法：
-// 人民币格式化
-// options(可选): 默认 { precision: 2, symbol: '¥' }, symbol 不支持覆盖。
-Currency.$.rmb(value: currencyjs.Any, options?: currencyjs.Options);
-
-// 千分位格式化
-// options(可选): 默认 { symbol: '' }, symbol 支持覆盖。
-Currency.$.format(value: currencyjs.Any, options?: currencyjs.Options);
-
-// 整数格式化
-// options(可选): 默认 { precision: 0 }, precision 不支持覆盖。
-Currency.$.formatInt(value: currencyjs.Any, options?: currencyjs.Options);
-
-// 单精度格式化
-// options(可选): 默认 { precision: 1 }, precision 不支持覆盖。
-Currency.$.formatFloat(value: currencyjs.Any, options?: currencyjs.Options);
-
-// 双精度格式化
-// options(可选): 默认 { precision: 2 }, precision 不支持覆盖。
-Currency.$.formatDouble(value: currencyjs.Any, options?: currencyjs.Options);
-
-// 货币单位格式化
-Currency.$.transform(value: currencyjs.Any, options: currencyjs.Options);
-```
+`同` [Storage 本地存储](#storage-本地存储)
 
 🎯 **示例**
 
 ```tsx
-import { Currency } from 'docker-awesome';
+import { Session } from 'docker-awesome';
+import { useEffect, useState } from 'react';
 
 export default function () {
-  return (
-    <>
-      <p>1. 原有方法：</p>
-      <ul>
-        <li>
-          <p>格式化：</p>
-          <p>
-            <code>Currency(123456).format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency(123456).format()}</output>
-          </p>
-          <p>
-            <code>Currency("123456").format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency('123456').format()}</output>
-          </p>
-          <p>
-            <code>Currency("$123456").format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency('$123456').format()}</output>
-          </p>
-          <p>
-            <code>
-              Currency("$123456", &#123; symbol: '€' &#125;).format()：
-            </code>
-            <span>&emsp;</span>
-            <output>{Currency('$123456', { symbol: '€' }).format()}</output>
-          </p>
-        </li>
-        <li>
-          <p>加法：</p>
-          <span>
-            <code>Currency(1).add(2).format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency(1).add(2).format()}</output>
-          </span>
-        </li>
-        <li>
-          <p>
-            <span>更多请参考</span>
-            <span>&nbsp;</span>
-            <span>
-              <a
-                href="https://www.npmjs.com/package/currency.js"
-                target="_blank"
-              >
-                currency.js
-              </a>
-            </span>
-          </p>
-        </li>
-      </ul>
-      <br />
-      <p>2. 扩展方法：</p>
-      <ul>
-        <li>
-          <p>人民币格式化：</p>
-          <code>Currency.$.rmb(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.rmb(123456)}</output>
-        </li>
-        <li>
-          <p>千分位格式化：</p>
-          <code>Currency.$.format(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.format(123456)}</output>
-        </li>
-        <li>
-          <p>整数格式化：</p>
-          <code>Currency.$.formatInt(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatInt(123.456)}</output>
-        </li>
-        <li>
-          <p>单精度格式化：</p>
-          <code>Currency.$.formatFloat(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatFloat(123.456)}</output>
-        </li>
-        <li>
-          <p>双精度格式化：</p>
-          <code>Currency.$.formatDouble(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatDouble(123.456)}</output>
-        </li>
-        <li>
-          <p>货币单位格式化：</p>
-          <code>Currency.$.transform(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.transform(123456)}</output>
-        </li>
-      </ul>
-    </>
-  );
+  const [state, setState] = useState();
+
+  useEffect(() => {
+    Session.set('Session', 'session-value');
+
+    setState(() => {
+      return Session.get('Session');
+    });
+    return () => {};
+  }, []);
+
+  return <div>会话存储数据：{state}</div>;
 }
 ```
 
-## 3. Qs 查询字符串格式化
+## Cookies 工具库
+
+集成 [js-cookie](https://www.npmjs.com/package/js-cookie) `A simple, lightweight JavaScript API for handling cookies.`
+
+🎯 **方法**
+
+参考 [js-cookie docs](https://www.npmjs.com/package/js-cookie)，使用方式请看下面示例
+
+🎯 **示例**
+
+```tsx
+import { Cookies } from 'docker-awesome';
+import { useEffect, useState } from 'react';
+
+export default function () {
+  const [state, setState] = useState();
+
+  useEffect(() => {
+    Cookies.set('cookie', 'cookie-value');
+
+    setState(() => {
+      return Cookies.get('cookie');
+    });
+    return () => {};
+  }, []);
+
+  return <div>cookie 数据：{state}</div>;
+}
+```
+
+## Qs 查询字符串格式化
 
 `Qs 基于` [qs](https://www.npmjs.com/package/qs) `进行扩展, 查询字符串解析和字符串化。`
 
@@ -271,7 +198,7 @@ export default function () {
 }
 ```
 
-## 4. Dayjs 日期时间格式化
+## Dayjs 日期时间格式化
 
 `Dayjs 基于` [dayjs](https://www.npmjs.com/package/dayjs) `扩展属性 $, $ 属性上挂载了快捷日期时间格式化方法。`
 
@@ -411,30 +338,7 @@ export default function () {
 }
 ```
 
-## 5. HTTP 响应状态码
-
-`HTTP 状态码常量, 参考：` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `或` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-
-`备注：HTTP_STATUS_CODE 的 key 遵循` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `状态码后面的英文(括号内的除外)，字母全大写，中间有空格的用_代替`
-
-`例如：状态码 101 Switching Protocols, key 即是 SWITCHING_PROTOCOLS, 取值方式即 HTTP_STATUS_CODE.SWITCHING_PROTOCOLS`
-
-🎯 **方法**
-
-```ts
-import { HTTP_STATUS_CODE } from 'docker-awesome';
-
-// 请求成功。
-HTTP_STATUS_CODE.OK; // 200
-// 客户端错误
-HTTP_STATUS_CODE.BAD_REQUEST; // 400
-// 服务器找不到请求的资源。
-HTTP_STATUS_CODE.NOT_FOUND; // 404
-// 服务端错误
-HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
-```
-
-## 6. [Lodash](https://www.npmjs.com/package/lodash-es) 工具库
+## [Lodash](https://www.npmjs.com/package/lodash-es) 工具库
 
 集成 [Lodash](https://lodash.com/) `A modern JavaScript utility library delivering modularity, performance & extras.`
 
@@ -471,7 +375,7 @@ export default function () {
 }
 ```
 
-## 7. UUID 工具库
+## UUID 工具库
 
 集成 [uuid](https://www.npmjs.com/package/uuid) `To create a random UUID...`
 
@@ -507,7 +411,7 @@ export default function () {
 }
 ```
 
-## 8. EventBus 消息发布订阅
+## EventBus 消息发布订阅
 
 🎯 **方法**
 
@@ -663,4 +567,168 @@ export default function () {
     </>
   );
 }
+```
+
+## Currency 货币格式化
+
+`Currency 基于` [currency.js](https://www.npmjs.com/package/currency.js) `进行扩展，并保留原有方法。扩展属性 $, $ 属性上挂载了快捷格式化方法`
+
+🎯 **方法**
+
+```ts
+import { Currency } from 'docker-awesome';
+
+// 原有方法：
+// 更多请参考 currency.js
+Currency(value: currencyjs.Any, options: currencyjs.Options);
+
+// 扩展方法：
+// 人民币格式化
+// options(可选): 默认 { precision: 2, symbol: '¥' }, symbol 不支持覆盖。
+Currency.$.rmb(value: currencyjs.Any, options?: currencyjs.Options);
+
+// 千分位格式化
+// options(可选): 默认 { symbol: '' }, symbol 支持覆盖。
+Currency.$.format(value: currencyjs.Any, options?: currencyjs.Options);
+
+// 整数格式化
+// options(可选): 默认 { precision: 0 }, precision 不支持覆盖。
+Currency.$.formatInt(value: currencyjs.Any, options?: currencyjs.Options);
+
+// 单精度格式化
+// options(可选): 默认 { precision: 1 }, precision 不支持覆盖。
+Currency.$.formatFloat(value: currencyjs.Any, options?: currencyjs.Options);
+
+// 双精度格式化
+// options(可选): 默认 { precision: 2 }, precision 不支持覆盖。
+Currency.$.formatDouble(value: currencyjs.Any, options?: currencyjs.Options);
+
+// 货币单位格式化
+Currency.$.transform(value: currencyjs.Any, options: currencyjs.Options);
+```
+
+🎯 **示例**
+
+```tsx
+import { Currency } from 'docker-awesome';
+
+export default function () {
+  return (
+    <>
+      <p>1. 原有方法：</p>
+      <ul>
+        <li>
+          <p>格式化：</p>
+          <p>
+            <code>Currency(123456).format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency(123456).format()}</output>
+          </p>
+          <p>
+            <code>Currency("123456").format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency('123456').format()}</output>
+          </p>
+          <p>
+            <code>Currency("$123456").format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency('$123456').format()}</output>
+          </p>
+          <p>
+            <code>
+              Currency("$123456", &#123; symbol: '€' &#125;).format()：
+            </code>
+            <span>&emsp;</span>
+            <output>{Currency('$123456', { symbol: '€' }).format()}</output>
+          </p>
+        </li>
+        <li>
+          <p>加法：</p>
+          <span>
+            <code>Currency(1).add(2).format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency(1).add(2).format()}</output>
+          </span>
+        </li>
+        <li>
+          <p>
+            <span>更多请参考</span>
+            <span>&nbsp;</span>
+            <span>
+              <a
+                href="https://www.npmjs.com/package/currency.js"
+                target="_blank"
+              >
+                currency.js
+              </a>
+            </span>
+          </p>
+        </li>
+      </ul>
+      <br />
+      <p>2. 扩展方法：</p>
+      <ul>
+        <li>
+          <p>人民币格式化：</p>
+          <code>Currency.$.rmb(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.rmb(123456)}</output>
+        </li>
+        <li>
+          <p>千分位格式化：</p>
+          <code>Currency.$.format(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.format(123456)}</output>
+        </li>
+        <li>
+          <p>整数格式化：</p>
+          <code>Currency.$.formatInt(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatInt(123.456)}</output>
+        </li>
+        <li>
+          <p>单精度格式化：</p>
+          <code>Currency.$.formatFloat(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatFloat(123.456)}</output>
+        </li>
+        <li>
+          <p>双精度格式化：</p>
+          <code>Currency.$.formatDouble(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatDouble(123.456)}</output>
+        </li>
+        <li>
+          <p>货币单位格式化：</p>
+          <code>Currency.$.transform(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.transform(123456)}</output>
+        </li>
+      </ul>
+    </>
+  );
+}
+```
+
+## HTTP 响应状态码
+
+`HTTP 状态码常量, 参考：` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `或` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+`备注：HTTP_STATUS_CODE 的 key 遵循` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `状态码后面的英文(括号内的除外)，字母全大写，中间有空格的用_代替`
+
+`例如：状态码 101 Switching Protocols, key 即是 SWITCHING_PROTOCOLS, 取值方式即 HTTP_STATUS_CODE.SWITCHING_PROTOCOLS`
+
+🎯 **方法**
+
+```ts
+import { HTTP_STATUS_CODE } from 'docker-awesome';
+
+// 请求成功。
+HTTP_STATUS_CODE.OK; // 200
+// 客户端错误
+HTTP_STATUS_CODE.BAD_REQUEST; // 400
+// 服务器找不到请求的资源。
+HTTP_STATUS_CODE.NOT_FOUND; // 404
+// 服务端错误
+HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
 ```

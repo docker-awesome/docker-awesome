@@ -1,6 +1,6 @@
 # Utils
 
-## 1. Storage
+## Storage
 
 `Web localStorage, Uses Base64 encoding and supports setting expiration dates.`
 
@@ -24,6 +24,16 @@ Storage.remove(key);
 
 // Remove all the localStorage items
 Storage.clear();
+
+// Get the value of the key at index
+Storage.key(index);
+
+// Get the number of data items saved
+Storage.count();
+
+// Listening to stored data changes
+// Note: The callback is not triggered on the current page that caused the data change, but on other windows on the same domain.
+Storage.listen(callback);
 ```
 
 🎯 **Examples**
@@ -81,150 +91,67 @@ export default function () {
 }
 ```
 
-## 2. Currency
+## Session
 
-`Currency extends` [currency.js](https://www.npmjs.com/package/currency.js) `and retains the original methods. Extended attribute $, $ attribute has shortcut formatting methods mounted on it.`
+`Web sessionStorage, Uses Base64 encoding and supports setting expiration dates.`
 
 🎯 **API**
 
-```ts
-import { Currency } from 'docker-awesome';
-
-// Original method:
-// See currency.js for more
-Currency(value: currencyjs.Any, options: currencyjs.Options);
-
-// Extended Methods：
-// Formatting RMB
-// options(optional): defaults to { precision: 2, symbol: '¥' }, Overriding symbols is not supported.
-Currency.$.rmb(value: currencyjs.Any, options?: currencyjs.Options);
-
-// Formatting Thousandths
-// options(optional): defaults to { symbol: '' }, Support for overriding symbol.
-Currency.$.format(value: currencyjs.Any, options?: currencyjs.Options);
-
-// Formatting integers
-// options(optional): defaults to { precision: 0 }, Overriding precision is not supported.
-Currency.$.formatInt(value: currencyjs.Any, options?: currencyjs.Options);
-
-// Formatting single precision
-// options(optional): defaults to { precision: 1 }, Overriding precision is not supported.
-Currency.$.formatFloat(value: currencyjs.Any, options?: currencyjs.Options);
-
-// Formatting double precision
-// options(optional): defaults to { precision: 2 }, Overriding precision is not supported.
-Currency.$.formatDouble(value: currencyjs.Any, options?: currencyjs.Options);
-
-// Formatting currency unit
-Currency.$.transform(value: currencyjs.Any, options: currencyjs.Options);
-```
+`The same as` [Storage](#storage)
 
 🎯 **Examples**
 
 ```tsx
-import { Currency } from 'docker-awesome';
+import { Session } from 'docker-awesome';
+import { useEffect, useState } from 'react';
 
 export default function () {
-  return (
-    <>
-      <p>1. Original method:</p>
-      <ul>
-        <li>
-          <p>Formatting:</p>
-          <p>
-            <code>Currency(123456).format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency(123456).format()}</output>
-          </p>
-          <p>
-            <code>Currency("123456").format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency('123456').format()}</output>
-          </p>
-          <p>
-            <code>Currency("$123456").format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency('$123456').format()}</output>
-          </p>
-          <p>
-            <code>
-              Currency("$123456", &#123; symbol: '€' &#125;).format()：
-            </code>
-            <span>&emsp;</span>
-            <output>{Currency('$123456', { symbol: '€' }).format()}</output>
-          </p>
-        </li>
-        <li>
-          <p>Addition:</p>
-          <span>
-            <code>Currency(1).add(2).format()：</code>
-            <span>&emsp;</span>
-            <output>{Currency(1).add(2).format()}</output>
-          </span>
-        </li>
-        <li>
-          <p>
-            <span>See</span>
-            <span>&nbsp;</span>
-            <span>
-              <a
-                href="https://www.npmjs.com/package/currency.js"
-                target="_blank"
-              >
-                currency.js
-              </a>
-              <span>&nbsp;</span>
-              <span>for more.</span>
-            </span>
-          </p>
-        </li>
-      </ul>
-      <br />
-      <p>2. Extended Methods：</p>
-      <ul>
-        <li>
-          <p>Formatting RMB:</p>
-          <code>Currency.$.rmb(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.rmb(123456)}</output>
-        </li>
-        <li>
-          <p>Formatting Thousandths:</p>
-          <code>Currency.$.format(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.format(123456)}</output>
-        </li>
-        <li>
-          <p>Formatting integers:</p>
-          <code>Currency.$.formatInt(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatInt(123.456)}</output>
-        </li>
-        <li>
-          <p>Formatting single precision:</p>
-          <code>Currency.$.formatFloat(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatFloat(123.456)}</output>
-        </li>
-        <li>
-          <p>Formatting double precision:</p>
-          <code>Currency.$.formatDouble(123.456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.formatDouble(123.456)}</output>
-        </li>
-        <li>
-          <p>Formatting currency unit:</p>
-          <code>Currency.$.transform(123456)：</code>
-          <span>&emsp;</span>
-          <output>{Currency.$.transform(123456)}</output>
-        </li>
-      </ul>
-    </>
-  );
+  const [state, setState] = useState();
+
+  useEffect(() => {
+    Session.set('Session', 'session-value');
+
+    setState(() => {
+      return Session.get('Session');
+    });
+    return () => {};
+  }, []);
+
+  return <div>session data: {state}</div>;
 }
 ```
 
-## 3. Qs
+## Cookies
+
+Based on [js-cookie](https://www.npmjs.com/package/js-cookie) `A simple, lightweight JavaScript API for handling cookies.`
+
+🎯 **API**
+
+See the [js-cookie docs](https://www.npmjs.com/package/js-cookie).
+
+🎯 **Examples**
+
+```tsx
+import { Cookies } from 'docker-awesome';
+import { useEffect, useState } from 'react';
+
+export default function () {
+  const [state, setState] = useState();
+
+  useEffect(() => {
+    Cookies.set('cookie', 'cookie-value');
+
+    setState(() => {
+      return Cookies.get('cookie');
+    });
+    return () => {};
+  }, []);
+
+  return <div>cookie data: {state}</div>;
+}
+```
+
+## Qs
 
 `Qs is extended based on` [qs](https://www.npmjs.com/package/qs) `, A querystring parsing and stringifying library with some added security.`
 
@@ -235,11 +162,11 @@ export default function () {
 ```ts
 import { Qs } from 'docker-awesome';
 // Stringifying
-// options: defaults to { addQueryPrefix: true, encoder: function (str) { return str; } }, Can be overridden by passing in a parameter of the same name
+// options: defaults to { addQueryPrefix: true, encoder: function (str) { return str; } }, Can be overridden by passing in a parameter of the same name.
 Qs.stringify(obj, options);
 
 // Parsing
-// options: defaults to { ignoreQueryPrefix: true, decoder: function (str) { return str; } }, Can be overridden by passing in a parameter of the same name
+// options: defaults to { ignoreQueryPrefix: true, decoder: function (str) { return str; } }, Can be overridden by passing in a parameter of the same name.
 Qs.parse(str, options);
 ```
 
@@ -271,7 +198,7 @@ export default function () {
 }
 ```
 
-## 4. Dayjs
+## Dayjs
 
 `Dayjs is based on` [dayjs](https://www.npmjs.com/package/dayjs) `, which extends the $ property with a shortcut datetime formatting method mounted on it.`
 
@@ -411,30 +338,7 @@ export default function () {
 }
 ```
 
-## 5. HTTP response status codes
-
-`See` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) `for more.`
-
-`Note：The key of the HTTP_STATUS_CODE follows the English following` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) `(except in parentheses), all letters are capitalized, and spaces in between are replaced by _`
-
-`For example: status code 101 Switching Protocols, key is SWITCHING_PROTOCOLS, value is HTTP_STATUS_CODE.SWITCHING_PROTOCOLS.`
-
-🎯 **API**
-
-```ts
-import { HTTP_STATUS_CODE } from 'docker-awesome';
-
-// The request succeeded.
-HTTP_STATUS_CODE.OK; // 200
-// Bad Request
-HTTP_STATUS_CODE.BAD_REQUEST; // 400
-// Not Found
-HTTP_STATUS_CODE.NOT_FOUND; // 404
-// Internal Server Error
-HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
-```
-
-## 6. [Lodash](https://www.npmjs.com/package/lodash-es)
+## [Lodash](https://www.npmjs.com/package/lodash-es)
 
 Based on [Lodash](https://lodash.com/) `A modern JavaScript utility library delivering modularity, performance & extras.`
 
@@ -471,7 +375,7 @@ export default function () {
 }
 ```
 
-## 7. UUID
+## UUID
 
 Based on [uuid](https://www.npmjs.com/package/uuid) `To create a random UUID...`
 
@@ -507,7 +411,7 @@ export default function () {
 }
 ```
 
-## 8. EventBus
+## EventBus
 
 🎯 **API**
 
@@ -663,4 +567,170 @@ export default function () {
     </>
   );
 }
+```
+
+## Currency
+
+`Currency extends` [currency.js](https://www.npmjs.com/package/currency.js) `and retains the original methods. Extended attribute $, $ attribute has shortcut formatting methods mounted on it.`
+
+🎯 **API**
+
+```ts
+import { Currency } from 'docker-awesome';
+
+// Original method:
+// See currency.js for more
+Currency(value: currencyjs.Any, options: currencyjs.Options);
+
+// Extended Methods：
+// Formatting RMB
+// options(optional): defaults to { precision: 2, symbol: '¥' }, Overriding symbols is not supported.
+Currency.$.rmb(value: currencyjs.Any, options?: currencyjs.Options);
+
+// Formatting Thousandths
+// options(optional): defaults to { symbol: '' }, Support for overriding symbol.
+Currency.$.format(value: currencyjs.Any, options?: currencyjs.Options);
+
+// Formatting integers
+// options(optional): defaults to { precision: 0 }, Overriding precision is not supported.
+Currency.$.formatInt(value: currencyjs.Any, options?: currencyjs.Options);
+
+// Formatting single precision
+// options(optional): defaults to { precision: 1 }, Overriding precision is not supported.
+Currency.$.formatFloat(value: currencyjs.Any, options?: currencyjs.Options);
+
+// Formatting double precision
+// options(optional): defaults to { precision: 2 }, Overriding precision is not supported.
+Currency.$.formatDouble(value: currencyjs.Any, options?: currencyjs.Options);
+
+// Formatting currency unit
+Currency.$.transform(value: currencyjs.Any, options: currencyjs.Options);
+```
+
+🎯 **Examples**
+
+```tsx
+import { Currency } from 'docker-awesome';
+
+export default function () {
+  return (
+    <>
+      <p>1. Original method:</p>
+      <ul>
+        <li>
+          <p>Formatting:</p>
+          <p>
+            <code>Currency(123456).format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency(123456).format()}</output>
+          </p>
+          <p>
+            <code>Currency("123456").format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency('123456').format()}</output>
+          </p>
+          <p>
+            <code>Currency("$123456").format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency('$123456').format()}</output>
+          </p>
+          <p>
+            <code>
+              Currency("$123456", &#123; symbol: '€' &#125;).format()：
+            </code>
+            <span>&emsp;</span>
+            <output>{Currency('$123456', { symbol: '€' }).format()}</output>
+          </p>
+        </li>
+        <li>
+          <p>Addition:</p>
+          <span>
+            <code>Currency(1).add(2).format()：</code>
+            <span>&emsp;</span>
+            <output>{Currency(1).add(2).format()}</output>
+          </span>
+        </li>
+        <li>
+          <p>
+            <span>See</span>
+            <span>&nbsp;</span>
+            <span>
+              <a
+                href="https://www.npmjs.com/package/currency.js"
+                target="_blank"
+              >
+                currency.js
+              </a>
+              <span>&nbsp;</span>
+              <span>for more.</span>
+            </span>
+          </p>
+        </li>
+      </ul>
+      <br />
+      <p>2. Extended Methods：</p>
+      <ul>
+        <li>
+          <p>Formatting RMB:</p>
+          <code>Currency.$.rmb(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.rmb(123456)}</output>
+        </li>
+        <li>
+          <p>Formatting Thousandths:</p>
+          <code>Currency.$.format(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.format(123456)}</output>
+        </li>
+        <li>
+          <p>Formatting integers:</p>
+          <code>Currency.$.formatInt(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatInt(123.456)}</output>
+        </li>
+        <li>
+          <p>Formatting single precision:</p>
+          <code>Currency.$.formatFloat(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatFloat(123.456)}</output>
+        </li>
+        <li>
+          <p>Formatting double precision:</p>
+          <code>Currency.$.formatDouble(123.456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.formatDouble(123.456)}</output>
+        </li>
+        <li>
+          <p>Formatting currency unit:</p>
+          <code>Currency.$.transform(123456)：</code>
+          <span>&emsp;</span>
+          <output>{Currency.$.transform(123456)}</output>
+        </li>
+      </ul>
+    </>
+  );
+}
+```
+
+## HTTP response status codes
+
+`See` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) `for more.`
+
+`Note：The key of the HTTP_STATUS_CODE follows the English following` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) `(except in parentheses), all letters are capitalized, and spaces in between are replaced by _`
+
+`For example: status code 101 Switching Protocols, key is SWITCHING_PROTOCOLS, value is HTTP_STATUS_CODE.SWITCHING_PROTOCOLS.`
+
+🎯 **API**
+
+```ts
+import { HTTP_STATUS_CODE } from 'docker-awesome';
+
+// The request succeeded.
+HTTP_STATUS_CODE.OK; // 200
+// Bad Request
+HTTP_STATUS_CODE.BAD_REQUEST; // 400
+// Not Found
+HTTP_STATUS_CODE.NOT_FOUND; // 404
+// Internal Server Error
+HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR; // 500
 ```
