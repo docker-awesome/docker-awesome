@@ -712,6 +712,53 @@ export default function () {
 }
 ```
 
+## IdCard
+
+`Used to verify ID number and get ID information.`
+
+🎯 **API**
+
+```ts
+import { IdCard } from 'docker-awesome';
+
+// Verify ID number
+// return boolean;
+IdCard.verify(id: string);
+
+// Get ID information
+// params：options(optional): default value -> { separator: '-' }.
+// return：{ valid: boolean; gender: 0 | 1; birthday: string; age: number; };
+// valid: Verify that the ID number is valid、gender：0 for female, 1 for male
+IdCard.info(id: string, options?: { separator?: string });
+```
+
+🎯 **Examples**
+
+```tsx
+import { IdCard } from 'docker-awesome';
+
+export default function () {
+  return (
+    <ul>
+      <li>
+        <p>Verify ID number: </p>
+        <code>IdCard.verify("610115199203176028")：</code>
+        <span>&emsp;</span>
+        <output>{`${IdCard.verify('610115199203176028')}`}</output>
+      </li>
+      <li>
+        <p>Get ID information: </p>
+        <code>IdCard.info("610115199203176028")：</code>
+        <span>&emsp;</span>
+        <output>
+          {JSON.stringify(IdCard.info('610115199203176028'), null, 2)}
+        </output>
+      </li>
+    </ul>
+  );
+}
+```
+
 ## HTTP response status codes
 
 `See` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) `for more.`
