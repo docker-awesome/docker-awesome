@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/docker-awesome/docker-awesome/compare/@docker-awesome/utils@0.3.0...@docker-awesome/utils@0.4.0) (2024-05-10)
+
+### Features
+
+- **utils:** id-card 身份证号码校验、信息 ([b7b9cd6](https://github.com/docker-awesome/docker-awesome/commit/b7b9cd65f3af6b071de5c6de0bba3aaac5d1d6d1))
+
 # [0.3.0](https://github.com/docker-awesome/docker-awesome/compare/@docker-awesome/utils@0.2.0...@docker-awesome/utils@0.3.0) (2023-11-05)
 
 ### Features

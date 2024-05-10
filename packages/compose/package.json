@@ -1,6 +1,6 @@
 {
   "name": "docker-awesome",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "docker-awesome packages.",
   "keywords": [
     "javascript",
@@ -30,7 +30,7 @@
     "dev": "father dev"
   },
   "dependencies": {
-    "@docker-awesome/utils": "^0.3.0"
+    "@docker-awesome/utils": "^0.4.0"
   },
   "publishConfig": {
     "access": "public",
