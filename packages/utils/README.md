@@ -710,6 +710,53 @@ export default function () {
 }
 ```
 
+## IdCard 身份证信息
+
+`IdCard 用于校验身份证号码，并获取身份证信息。`
+
+🎯 **方法**
+
+```ts
+import { IdCard } from 'docker-awesome';
+
+// 校验身份证号码
+// return boolean;
+IdCard.verify(id: string);
+
+// 获取身份证信息
+// 参数：options(可选): 默认 { separator: '-' }。
+// 返回值：{ valid: boolean; gender: 0 | 1; birthday: string; age: number; };
+// valid: 身份证号是否有效、gender：性别 0 表示 女，1 表示 男、birthday：生日、age：年龄
+IdCard.info(id: string, options?: { separator?: string });
+```
+
+🎯 **示例**
+
+```tsx
+import { IdCard } from 'docker-awesome';
+
+export default function () {
+  return (
+    <ul>
+      <li>
+        <p>校验身份证号码: </p>
+        <code>IdCard.verify("610115199203176028")：</code>
+        <span>&emsp;</span>
+        <output>{`${IdCard.verify('610115199203176028')}`}</output>
+      </li>
+      <li>
+        <p>获取身份证信息：</p>
+        <code>IdCard.info("610115199203176028")：</code>
+        <span>&emsp;</span>
+        <output>
+          {JSON.stringify(IdCard.info('610115199203176028'), null, 2)}
+        </output>
+      </li>
+    </ul>
+  );
+}
+```
+
 ## HTTP 响应状态码
 
 `HTTP 状态码常量, 参考：` [HTTP 响应状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status) `或` [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)

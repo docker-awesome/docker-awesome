@@ -4,6 +4,7 @@ export * as UUID from 'uuid';
 export { default as Currency } from './currency';
 export { default as Dayjs } from './dayjs';
 export { default as EventBus } from './event-bus';
+export { default as IdCard } from './id-card';
 export { default as Qs } from './qs';
 export { default as Session } from './session';
 export { default as HTTP_STATUS_CODE } from './status';
